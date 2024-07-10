@@ -1,8 +1,11 @@
-import { Box } from "@mui/material";
-import Container from "../../components/Container/Container";
+import { Box, Typography } from "@mui/material";
 import { Input } from "../../components/Input/Input";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import Container from "../../components/Container/Container";
 import CardBasic from "../../components/Card";
+import Profile from "../../components/Profile";
+import { api } from "../../services/service";
 
 export default function Blog() {
   const cardFakeData = [
@@ -37,10 +40,52 @@ export default function Blog() {
     formState: { errors },
   } = useForm({});
 
+  const onLoadScreen = async () => {
+    await api
+      .get(`/search/issues?q=Dynamic%20typing%20repo:daltonmenezes/test`)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    onLoadScreen();
+  }, []);
+
   return (
     <Container>
-      {/* <Box paddingY={5}>
-        <Box paddingBottom={6}>
+      <Profile />
+
+      <Box paddingY={5} marginTop={22}>
+        <Box paddingBottom={6} display="flex" flexDirection="column" gap="20px">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography
+              variant="h2"
+              fontSize={20}
+              color="#E7EDF4"
+              fontWeight="bold"
+            >
+              Publicações
+            </Typography>
+
+            <Typography
+              variant="caption"
+              fontSize={14}
+              display="block"
+              color="#7B96B2"
+              fontWeight="regular"
+            >
+              6 publicações
+            </Typography>
+          </Box>
+
           <Input
             control={control}
             errors={errors}
@@ -61,7 +106,7 @@ export default function Blog() {
             );
           })}
         </Box>
-      </Box> */}
+      </Box>
     </Container>
   );
 }

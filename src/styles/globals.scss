@@ -59,6 +59,16 @@ button {
     sans-serif;
 }
 
+a {
+  display: flex;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--blue);
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
 // Styles for mobiles
 @include media-xs {
   h1 {

@@ -22,6 +22,7 @@ export default function Container({
       width="100%"
       maxWidth={1250}
       margin="0 auto"
+      position="relative"
       className={clsx(styles.container, className)}
     >
       {children}
