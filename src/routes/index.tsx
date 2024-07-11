@@ -1,6 +1,6 @@
 import { Outlet, Route, Routes } from "react-router-dom";
-import DefaultTemplate from "../components/DefaultTemplate";
 import { allRoutes } from "./allRoutes";
+import DefaultTemplate from "../components/DefaultTemplate";
 
 function Template() {
   return (

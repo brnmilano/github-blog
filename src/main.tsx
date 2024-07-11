@@ -7,13 +7,16 @@ import Router from "./routes/index.tsx";
 import theme from "./styles/mui/theme.ts";
 import "./styles/index.scss";
 import "react-toastify/dist/ReactToastify.css";
+import { RequestsProvider } from "./hooks/useRequests.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <ToastContainer position="top-center" />
-        <Router />
+        <RequestsProvider>
+          <ToastContainer position="top-center" />
+          <Router />
+        </RequestsProvider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>

@@ -1,46 +1,24 @@
-import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import { api } from "../../services/service";
-import { AxiosError } from "axios";
+import { useRequests } from "../../hooks/useRequests";
 import styles from "./styles.module.scss";
 import GitHubIcon from "../Icons/GitHubIcon";
 import CompanyIcon from "../Icons/CompanyIcon";
 import FollowersIcon from "../Icons/FollowersIcon";
 import LinkIcon from "../Icons/LinkIcon";
 
-interface userProps {
-  login: string;
-  avatar_url: string;
-  html_url: string;
-  name: string;
-  company: string;
-  bio: string;
-  followers: number;
-}
-
+/**
+ * Componente Profile: Renderiza o perfil do usuário.
+ *
+ * Este componente é responsável por exibir as informações do perfil de um usuário.
+ */
 export default function Profile() {
-  const [user, setUser] = useState<userProps>({} as userProps);
+  const { user } = useRequests();
 
   const userInfo = [
     { icon: <GitHubIcon />, text: user.login },
     { icon: <CompanyIcon />, text: user.company ?? "Sem empresa atualmente" },
     { icon: <FollowersIcon />, text: `${user.followers} seguidores` },
   ];
-
-  const onLoadScreen = async () => {
-    await api
-      .get("/users/brnmilano")
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((error: AxiosError) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    onLoadScreen();
-  }, []);
 
   return (
     <Box className={styles.container}>
