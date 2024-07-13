@@ -1,0 +1,15 @@
+.container {
+  height: 100vh;
+
+  .postInfoWrapper {
+    position: absolute;
+    width: calc(100% - 50px);
+    top: -210px;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}

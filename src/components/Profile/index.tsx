@@ -43,7 +43,7 @@ export default function Profile() {
                 fontSize={24}
                 fontWeight="bold"
               >
-                {user.name}
+                {user.login}
               </Typography>
 
               <a href={user.html_url} target="_blank" rel="noopener noreferrer">

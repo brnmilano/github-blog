@@ -3,7 +3,6 @@ import { Input } from "../../components/Input/Input";
 import { useForm } from "react-hook-form";
 import { useRequests } from "../../hooks/useRequests";
 import { useNavigate } from "react-router-dom";
-import { postPath } from "../../constants/paths";
 import Container from "../../components/Container/Container";
 import CardBasic from "../../components/Card";
 import Profile from "../../components/Profile";
@@ -16,16 +15,23 @@ interface SearchProps {
 export default function Blog() {
   const navigate = useNavigate();
 
-  const { posts, setPostId } = useRequests();
+  const { posts } = useRequests();
 
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({});
 
+  const watchSearchContent = watch("searchContent");
+
   const handleSearchPosts = (data: SearchProps) => {
-    console.log(data.searchContent);
+    console.log({ watchSearchContent, data });
+  };
+
+  const handleViewPost = (id: number) => {
+    navigate(`/post/${id}`);
   };
 
   return (
@@ -82,9 +88,7 @@ export default function Blog() {
                 content={card.body}
                 date={card.created_at}
                 handleClick={() => {
-                  setPostId(card.number);
-
-                  navigate(postPath);
+                  handleViewPost(card.number);
                 }}
               />
             );

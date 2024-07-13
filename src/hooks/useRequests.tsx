@@ -14,6 +14,7 @@ import { api } from "../services/service";
 import { AxiosError } from "axios";
 import { gitHubIssues, userProfile } from "../constants/paths";
 import { toast } from "react-toastify";
+import { PostDetailsProps, PostProps, UserProps } from "../types";
 
 interface useRequestsProps {
   children: ReactNode;
@@ -26,37 +27,25 @@ interface RequestContextData {
   setUser: Dispatch<SetStateAction<UserProps>>;
   posts: PostProps[];
   setPosts: Dispatch<SetStateAction<PostProps[]>>;
-  postId: number;
-  setPostId: Dispatch<SetStateAction<number>>;
   searchPost: string;
   setSearchPost: Dispatch<SetStateAction<string>>;
-}
-
-interface UserProps {
-  login: string;
-  avatar_url: string;
-  html_url: string;
-  name: string;
-  company: string;
-  bio: string;
-  followers: number;
-}
-
-interface PostProps {
-  number: number;
-  title: string;
-  body: string;
-  created_at: string;
+  postDetails: PostDetailsProps;
+  setPostDetails: Dispatch<SetStateAction<PostDetailsProps>>;
+  getPostDetails: (id: number) => Promise<void>;
 }
 
 export const RequestContext = createContext({} as RequestContextData);
 
 function RequestsProvider({ children }: useRequestsProps) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<UserProps>({} as UserProps);
   const [posts, setPosts] = useState<PostProps[]>([]);
-  const [postId, setPostId] = useState<number>(0);
+  const [postDetails, setPostDetails] = useState<PostDetailsProps>(
+    {} as PostDetailsProps
+  );
   const [searchPost, setSearchPost] = useState<string>("");
+
+  console.log(user.login);
 
   /**
    * Função para obter os dados do perfil de um usuário específico do GitHub.
@@ -77,6 +66,8 @@ function RequestsProvider({ children }: useRequestsProps) {
         } else {
           toast.error("Erro ao buscar usuário");
         }
+
+        setUser({} as UserProps);
       });
   }, [user]);
 
@@ -112,25 +103,29 @@ function RequestsProvider({ children }: useRequestsProps) {
    * A função verifica se o `postId` é diferente de zero antes de fazer a requisição.
    * Passando pela verificação, faz uma requisição GET para buscar os dados do post com o ID fornecido.
    */
-  const getPostId = async () => {
-    if (postId !== 0) {
-      await api
-        .get(`${gitHubIssues}/${postId}`)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error: AxiosError) => {
-          console.log(error);
-        });
-    }
+  const getPostDetails = async (id: number) => {
+    await api
+      .get(`${gitHubIssues}/${id}`)
+      .then((response) => {
+        const postDetailsFormatted = {
+          ...response.data,
+          followers: user.followers,
+          login: user.login,
+        };
+
+        setPostDetails(postDetailsFormatted);
+      })
+      .catch((error: AxiosError) => {
+        if (error.response?.status === 404) {
+          toast.error("Erro ao buscar publicação");
+        }
+
+        setPostDetails({} as PostDetailsProps);
+      });
   };
 
   useEffect(() => {
     getUserProfile();
-  }, []);
-
-  useEffect(() => {
-    getPostId();
   }, []);
 
   useEffect(() => {
@@ -146,10 +141,11 @@ function RequestsProvider({ children }: useRequestsProps) {
         setUser,
         posts,
         setPosts,
-        postId,
-        setPostId,
         searchPost,
         setSearchPost,
+        postDetails,
+        setPostDetails,
+        getPostDetails,
       }}
     >
       {children}
