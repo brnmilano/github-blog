@@ -12,7 +12,12 @@ import {
 } from "react";
 import { api } from "../services/service";
 import { AxiosError } from "axios";
-import { gitHubIssues, userProfile } from "../constants/paths";
+import {
+  gitHubIssues,
+  gitRepository,
+  searchIssues,
+  userProfile,
+} from "../constants/paths";
 import { toast } from "react-toastify";
 import { PostDetailsProps, PostProps, UserProps } from "../types";
 
@@ -31,6 +36,7 @@ interface RequestContextData {
   setSearchPost: Dispatch<SetStateAction<string>>;
   postDetails: PostDetailsProps;
   setPostDetails: Dispatch<SetStateAction<PostDetailsProps>>;
+  searchPosts: (query?: string) => Promise<void>;
   getPostDetails: (id: number) => Promise<void>;
 }
 
@@ -38,17 +44,19 @@ export const RequestContext = createContext({} as RequestContextData);
 
 function RequestsProvider({ children }: useRequestsProps) {
   const [loading, setLoading] = useState(false);
+
   const [user, setUser] = useState<UserProps>({} as UserProps);
   const [posts, setPosts] = useState<PostProps[]>([]);
+  const [searchPost, setSearchPost] = useState<string>("");
   const [postDetails, setPostDetails] = useState<PostDetailsProps>(
     {} as PostDetailsProps
   );
-  const [searchPost, setSearchPost] = useState<string>("");
-
-  console.log(user.login);
 
   /**
    * Função para obter os dados do perfil de um usuário específico do GitHub.
+   *
+   * - `#200` - Atualiza o estado `user` com os dados recebidos.
+   * - `#404` - Atualiza o estado `user` para um objeto vazio e exibe um toast de erro.
    *
    * Utiliza `useCallback` para memorizar a instância da função, melhorando a eficiência ao evitar
    * recriações desnecessárias da função durante re-renderizações do componente, exceto quando
@@ -63,8 +71,6 @@ function RequestsProvider({ children }: useRequestsProps) {
       .catch((error: AxiosError) => {
         if (error.response?.status === 404) {
           toast.error("Usuário não encontrado");
-        } else {
-          toast.error("Erro ao buscar usuário");
         }
 
         setUser({} as UserProps);
@@ -72,15 +78,18 @@ function RequestsProvider({ children }: useRequestsProps) {
   }, [user]);
 
   /**
-   * Função para obter a lista de Issues de um repositório específico do GitHub,
-   * e atualiza o estado com os dados recebidos.
-   * Em caso de erro na requisição, o estado é atualizado para uma lista vazia.
+   * Função para obter a lista de Issues de um repositório específico do GitHub.
+   *
+   * - `#200` - Atualiza o estado `posts` com os dados recebidos.
+   * - `#404` - Atualiza o estado `posts` para uma lista vazia e exibe um toast de erro.
    *
    * Utiliza `useCallback` para memorizar a instância da função, melhorando a eficiência ao evitar
    * recriações desnecessárias da função durante re-renderizações do componente, exceto quando
    * suas dependências especificadas forem alteradas.
    */
   const getPosts = useCallback(async () => {
+    setLoading(true);
+
     await api
       .get<PostProps[]>(gitHubIssues)
       .then((response) => {
@@ -94,16 +103,66 @@ function RequestsProvider({ children }: useRequestsProps) {
         }
 
         setPosts([]);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [posts]);
 
   /**
+   * Função para buscar as issues de acordo com o parâmetro em um repositório específico do GitHub.
+   *
+   * - Cria um fake delay de 1 segundo para simular o loading.
+   * - `#200` - Atualiza o estado `posts` com os dados recebidos.
+   * - `#404` - Atualiza o estado `posts` para uma lista vazia e exibe um toast de erro.
+   *
+   * @param {string} query - Valor utilizado para pesquisar as issues do repositório.
+   *
+   * Utiliza `useCallback` para memorizar a instância da função, melhorando a eficiência ao evitar
+   * recriações desnecessárias da função durante re-renderizações do componente, exceto quando
+   * suas dependências especificadas forem alteradas.
+   */
+  const searchPosts = useCallback(
+    async (query?: string) => {
+      setLoading(true);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      await api
+        .get<{ items: PostProps[] }>(
+          `${searchIssues}?q=${query}%20repo:${gitRepository}`
+        )
+        .then((response) => {
+          const postsFiltered = response.data.items;
+
+          setPosts(postsFiltered);
+        })
+        .catch((error: AxiosError) => {
+          if (error.response?.status === 404) {
+            toast.error("Erro ao buscar publicações");
+          }
+
+          setPosts([]);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    },
+    [posts]
+  );
+
+  /**
    * Função para obter os dados de uma Issue específica através do seu ID.
    *
-   * A função verifica se o `postId` é diferente de zero antes de fazer a requisição.
-   * Passando pela verificação, faz uma requisição GET para buscar os dados do post com o ID fornecido.
+   * - Cria um fake delay de 1 segundo para simular o loading.
+   * - `#200` - Formata os dados recebidos, adicionando a quantidade de seguidores e login do usuário. Em seguida, atualiza o estado `postDetails` com os dados formatados.
+   * - `#404` - Atualiza o estado `postDetails` para um objeto vazio e exibe um toast de erro.
    */
   const getPostDetails = async (id: number) => {
+    setLoading(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     await api
       .get(`${gitHubIssues}/${id}`)
       .then((response) => {
@@ -121,6 +180,9 @@ function RequestsProvider({ children }: useRequestsProps) {
         }
 
         setPostDetails({} as PostDetailsProps);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -145,6 +207,7 @@ function RequestsProvider({ children }: useRequestsProps) {
         setSearchPost,
         postDetails,
         setPostDetails,
+        searchPosts,
         getPostDetails,
       }}
     >

@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, CircularProgress, Skeleton, Typography } from "@mui/material";
 import { useRequests } from "../../hooks/useRequests";
 import { blogPath } from "../../constants/paths";
+import { getRelativeTime } from "../../utils";
 import Container from "../../components/Container/Container";
 import styles from "./styles.module.scss";
 import LinkIcon from "../../components/Icons/LinkIcon";
@@ -10,26 +12,30 @@ import BackArrowIcon from "../../components/Icons/BackArrowIcon";
 import GitHubIcon from "../../components/Icons/GitHubIcon";
 import CalendarIcon from "../../components/Icons/CalendarIcon";
 import CommentsIcon from "../../components/Icons/CommentsIcon";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function Post() {
   const param = useParams();
 
   const { postDetails, getPostDetails, loading } = useRequests();
 
-  const onLoadScreen = () => {
-    const postId = Number(param.postId);
-
-    getPostDetails(postId);
-  };
+  const formattedDate = getRelativeTime(postDetails.created_at);
 
   const postDetailInfo = [
     { icon: <GitHubIcon />, text: postDetails.login },
     {
       icon: <CalendarIcon />,
-      text: postDetails.created_at,
+      text: formattedDate,
     },
-    { icon: <CommentsIcon />, text: `${postDetails.followers} seguidores` },
+    { icon: <CommentsIcon />, text: `${postDetails.comments} comentários` },
   ];
+
+  const onLoadScreen = () => {
+    const postId = Number(param.postId);
+
+    getPostDetails(postId);
+  };
 
   useEffect(() => {
     onLoadScreen();
@@ -47,7 +53,28 @@ export default function Post() {
           borderRadius="10px"
         >
           {loading ? (
-            <Skeleton animation="wave" />
+            <Box display="flex" flexDirection="column" gap="12px">
+              <Skeleton
+                animation="wave"
+                variant="rounded"
+                width="100%"
+                height={20}
+              />
+
+              <Skeleton
+                animation="wave"
+                variant="rounded"
+                width="100%"
+                height={50}
+              />
+
+              <Skeleton
+                animation="wave"
+                variant="rounded"
+                width="100%"
+                height={20}
+              />
+            </Box>
           ) : (
             <>
               <Box
@@ -97,8 +124,22 @@ export default function Post() {
           )}
         </Box>
 
-        <Box marginTop={15} paddingInline={5}>
-          {postDetails.body}
+        <Box
+          marginTop={20}
+          paddingInline={5}
+          className={styles.markdownContent}
+        >
+          {loading ? (
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {postDetails.body}
+              </ReactMarkdown>
+            </>
+          )}
         </Box>
       </Box>
     </Container>

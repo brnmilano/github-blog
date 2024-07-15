@@ -1,7 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import {
+  SearchFormInputs,
+  searchFormSchema,
+} from "../../models/searchFormSchema";
+import { Box, Skeleton, Typography } from "@mui/material";
 import { Input } from "../../components/Input/Input";
 import { useForm } from "react-hook-form";
 import { useRequests } from "../../hooks/useRequests";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import Container from "../../components/Container/Container";
 import CardBasic from "../../components/Card";
@@ -9,25 +14,24 @@ import Profile from "../../components/Profile";
 import styles from "./styles.module.scss";
 
 interface SearchProps {
-  searchContent?: string;
+  query?: string;
 }
 
 export default function Blog() {
   const navigate = useNavigate();
 
-  const { posts } = useRequests();
+  const { posts, loading, searchPosts } = useRequests();
 
   const {
     control,
     handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm({});
-
-  const watchSearchContent = watch("searchContent");
+    formState: { errors, isSubmitting },
+  } = useForm<SearchFormInputs>({
+    resolver: zodResolver(searchFormSchema),
+  });
 
   const handleSearchPosts = (data: SearchProps) => {
-    console.log({ watchSearchContent, data });
+    searchPosts(data.query);
   };
 
   const handleViewPost = (id: number) => {
@@ -73,26 +77,58 @@ export default function Blog() {
               control={control}
               errors={errors}
               placeholder="Buscar conteúdo"
-              registerField="searchContent"
+              registerField="query"
+              disabled={isSubmitting}
             />
           </form>
         </Box>
 
         <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="32px">
-          {posts.map((card, index) => {
-            return (
-              <CardBasic
-                key={index}
-                number={card.number}
-                title={card.title}
-                content={card.body}
-                date={card.created_at}
-                handleClick={() => {
-                  handleViewPost(card.number);
-                }}
+          {loading ? (
+            <>
+              <Skeleton
+                animation="wave"
+                variant="rounded"
+                width="100%"
+                height={160}
               />
-            );
-          })}
+              <Skeleton
+                animation="wave"
+                variant="rounded"
+                width="100%"
+                height={160}
+              />
+              <Skeleton
+                animation="wave"
+                variant="rounded"
+                width="100%"
+                height={160}
+              />
+              <Skeleton
+                animation="wave"
+                variant="rounded"
+                width="100%"
+                height={160}
+              />
+            </>
+          ) : (
+            <>
+              {posts.map((card, index) => {
+                return (
+                  <CardBasic
+                    key={index}
+                    number={card.number}
+                    title={card.title}
+                    content={card.body}
+                    date={card.created_at}
+                    handleClick={() => {
+                      handleViewPost(card.number);
+                    }}
+                  />
+                );
+              })}
+            </>
+          )}
         </Box>
       </Box>
     </Container>

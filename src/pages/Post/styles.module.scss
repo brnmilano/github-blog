@@ -1,15 +1,65 @@
 .container {
-  height: 100vh;
-
   .postInfoWrapper {
     position: absolute;
     width: calc(100% - 50px);
-    top: -210px;
+    top: -250px;
   }
 
   span {
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  .markdownContent {
+    color: #ccd;
+
+    line-height: 1.6;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: var(--base-text);
+      margin-top: 24px;
+      line-height: 34px;
+    }
+
+    code {
+      display: flex;
+      background-color: var(--base-post);
+      color: #f8f8f2;
+      padding: 20px;
+      border-radius: 4px;
+      font-family: "Courier New", Courier, monospace;
+      width: 100%;
+    }
+
+    p {
+      margin: 16px 0;
+      font-size: 16px;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    a {
+      font-size: 16px;
+      text-transform: lowercase;
+      text-decoration: none;
+      font-weight: normal;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    // Ajuste adicional para links dentro de parágrafos para evitar quebra de linha
+    p a {
+      display: inline;
+    }
   }
 }
