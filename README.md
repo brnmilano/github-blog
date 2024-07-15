@@ -16,6 +16,12 @@
   npm run dev
   ```
 
+  Iniciar o servidor json.server para efetuar requisições:
+
+  ```
+  npm run dev:server
+  ```
+
   Iniciar em modo de produção:
 
   ```
@@ -32,5 +38,11 @@
 
   ```
   npm run lint
+  ```
+
+  Iniciar o modo Lint para corrigir erros no código do projeto:
+
+  ```
+  npm run lint:fix
   ```
 
