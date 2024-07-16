@@ -1,10 +1,4 @@
 .container {
-  .postInfoWrapper {
-    position: absolute;
-    width: calc(100% - 50px);
-    top: -250px;
-  }
-
   span {
     display: flex;
     align-items: center;
@@ -12,9 +6,7 @@
   }
 
   .markdownContent {
-    color: #ccd;
-
-    line-height: 1.6;
+    color: var(--base-subtitle);
 
     h1,
     h2,
@@ -24,13 +16,12 @@
     h6 {
       color: var(--base-text);
       margin-top: 24px;
-      line-height: 34px;
     }
 
     code {
       display: flex;
       background-color: var(--base-post);
-      color: #f8f8f2;
+      color: var(--white);
       padding: 20px;
       border-radius: 4px;
       font-family: "Courier New", Courier, monospace;

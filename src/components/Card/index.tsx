@@ -55,18 +55,24 @@ export default function CardBasic(props: CardProps) {
     >
       <CardContent>
         <Box
-          display="flex"
           alignItems="flex-start"
           justifyContent="space-between"
           marginBottom={4}
+          display={{
+            xs: "block",
+            md: "flex",
+          }}
         >
           <Typography
             variant="h2"
             fontSize={20}
             color="#E7EDF4"
             fontWeight="bold"
-            maxWidth="300px"
             lineHeight="30px"
+            maxWidth={{
+              md: "250px",
+              lg: "300px",
+            }}
           >
             {title}
           </Typography>

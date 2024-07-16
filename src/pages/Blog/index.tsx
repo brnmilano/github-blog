@@ -42,8 +42,19 @@ export default function Blog() {
     <Container>
       <Profile />
 
-      <Box paddingY={5} marginTop={22}>
-        <Box paddingBottom={6}>
+      <Box
+        paddingY={5}
+        marginTop={{
+          xs: "0",
+          md: "25",
+        }}
+      >
+        <Box
+          paddingBottom={{
+            xs: "32px",
+            md: "48px",
+          }}
+        >
           <form
             className={styles.formWrapper}
             onSubmit={handleSubmit(handleSearchPosts)}
@@ -83,7 +94,14 @@ export default function Blog() {
           </form>
         </Box>
 
-        <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="32px">
+        <Box
+          display="grid"
+          gridTemplateColumns={{
+            xs: "1fr",
+            md: "repeat(2, 1fr)",
+          }}
+          gap="32px"
+        >
           {loading ? (
             <>
               <Skeleton
