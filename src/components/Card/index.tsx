@@ -1,7 +1,6 @@
 import { CardContent, Typography, Card, Box } from "@mui/material";
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { capitalFirstLetter } from "../../utils";
+import { capitalFirstLetter, getRelativeTime } from "../../utils";
+import RemoveMarkdown from "remove-markdown";
 
 interface CardProps {
   number: number;
@@ -25,20 +24,9 @@ interface CardProps {
 export default function CardBasic(props: CardProps) {
   const { title, content, date, number, handleClick } = props;
 
-  /**
-   * Formate a data para mostrar o tempo decorrido desde que o issue foi criado.
-   * Exemplo: "há 2 dias"
-   *
-   * AddSuffix: true -> Adiciona "há cerca de" antes do tempo decorrido.
-   *
-   * Locale: ptBR -> Define o idioma para português do Brasil.
-   *
-   * replace("cerca de ", "") -> Remove a string "cerca de " do resultado.
-   */
-  const formattedDate = formatDistanceToNow(date, {
-    addSuffix: true,
-    locale: ptBR,
-  }).replace("cerca de ", "");
+  const formattedContent = RemoveMarkdown(content);
+
+  const formattedDate = getRelativeTime(date);
 
   return (
     <Card
@@ -96,7 +84,7 @@ export default function CardBasic(props: CardProps) {
           overflow="hidden"
           textOverflow="ellipsis"
         >
-          {content}
+          {formattedContent}
         </Typography>
       </CardContent>
     </Card>

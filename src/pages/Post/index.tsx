@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { Box, CircularProgress, Skeleton, Typography } from "@mui/material";
 import { useRequests } from "../../hooks/useRequests";
 import { blogPath } from "../../constants/paths";
-import { getRelativeTime } from "../../utils";
+import { capitalFirstLetter, getRelativeTime } from "../../utils";
 import Container from "../../components/Container/Container";
 import styles from "./styles.module.scss";
 import LinkIcon from "../../components/Icons/LinkIcon";
@@ -26,7 +26,7 @@ export default function Post() {
     { icon: <GitHubIcon />, text: postDetails.login },
     {
       icon: <CalendarIcon />,
-      text: formattedDate,
+      text: capitalFirstLetter(formattedDate),
     },
     { icon: <CommentsIcon />, text: `${postDetails.comments} comentários` },
   ];
