@@ -1,8 +1,6 @@
-.container {
-  position: absolute;
-  width: calc(100% - 50px);
-  top: -280px;
+@import "../../styles/breakpoints";
 
+.container {
   img {
     width: 148px;
     height: 148px;

@@ -45,12 +45,21 @@ export default function Post() {
     <Container>
       <Box className={styles.container}>
         <Box
-          className={styles.postInfoWrapper}
           sx={{ backgroundColor: "#0B1B2B" }}
           display="flex"
           flexDirection="column"
-          p={5}
           borderRadius="10px"
+          position="relative"
+          p={{
+            xs: 2,
+            sm: 3,
+            md: 5,
+          }}
+          marginTop={{
+            xs: "30px",
+            md: "-60px",
+            lg: "-80px",
+          }}
         >
           {loading ? (
             <Box display="flex" flexDirection="column" gap="12px">
@@ -106,7 +115,17 @@ export default function Post() {
                 {postDetails.title}
               </Typography>
 
-              <Box display="flex" gap="32px" marginTop="15px">
+              <Box
+                display={{
+                  xs: "block",
+                  md: "flex",
+                }}
+                marginTop={{
+                  xs: "25px",
+                  md: "10px",
+                }}
+                gap="32px"
+              >
                 {postDetailInfo.map((item, index) => (
                   <Typography
                     key={index}
@@ -114,6 +133,15 @@ export default function Post() {
                     color="#A2B8CD"
                     fontSize={16}
                     fontWeight="regular"
+                    marginBottom={{
+                      xs: "15px",
+                      md: 0,
+                    }}
+                    sx={{
+                      "&:last-child": {
+                        marginBottom: 0,
+                      },
+                    }}
                   >
                     {item.icon}
                     {item.text}
@@ -125,8 +153,16 @@ export default function Post() {
         </Box>
 
         <Box
-          marginTop={20}
-          paddingInline={5}
+          marginTop={{
+            xs: 4,
+            sm: 6,
+            md: 8,
+          }}
+          paddingInline={{
+            xs: 0,
+            sm: 3,
+            md: 5,
+          }}
           className={styles.markdownContent}
         >
           {loading ? (

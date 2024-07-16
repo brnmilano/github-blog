@@ -16,19 +16,38 @@ export default function Profile() {
 
   const userInfo = [
     { icon: <GitHubIcon />, text: user.login },
-    { icon: <CompanyIcon />, text: user.company ?? "Sem empresa atualmente" },
+    { icon: <CompanyIcon />, text: user.company ?? "Sem empresa" },
     { icon: <FollowersIcon />, text: `${user.followers} seguidores` },
   ];
 
   return (
     <Box className={styles.container}>
       <Box
-        sx={{ backgroundColor: "#0B1B2B", borderRadius: "10px" }}
-        display="flex"
+        sx={{
+          backgroundColor: "#0B1B2B",
+          borderRadius: "10px",
+        }}
+        display={{
+          xs: "block",
+          md: "flex",
+        }}
         gap="32px"
-        p={5}
+        p={{
+          xs: 2,
+          sm: 3,
+          md: 5,
+        }}
+        marginTop={{
+          xs: "30px",
+          md: "-60px",
+          lg: "-80px",
+        }}
+        zIndex={1}
+        position="relative"
       >
-        <img src={user.avatar_url} />
+        <Box display="flex" justifyContent="center">
+          <img src={user.avatar_url} />
+        </Box>
 
         <Box
           display="flex"
@@ -36,20 +55,43 @@ export default function Profile() {
           justifyContent="space-between"
         >
           <Box display="flex" flexDirection="column" gap="15px">
-            <Box display="flex" justifyContent="space-between">
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Typography
                 variant="h1"
                 color="#E7EDF4"
                 fontSize={24}
                 fontWeight="bold"
+                marginTop={{
+                  xs: "15px",
+                  md: 0,
+                }}
+                marginBottom={{
+                  xs: "10px",
+                  md: 0,
+                }}
               >
                 {user.login}
               </Typography>
 
-              <a href={user.html_url} target="_blank" rel="noopener noreferrer">
-                Github
-                <LinkIcon />
-              </a>
+              <Box
+                marginTop={{
+                  xs: "10px",
+                  md: 0,
+                }}
+              >
+                <a
+                  href={user.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Github
+                  <LinkIcon />
+                </a>
+              </Box>
             </Box>
 
             <Typography
@@ -62,7 +104,17 @@ export default function Profile() {
             </Typography>
           </Box>
 
-          <Box display="flex" gap="32px">
+          <Box
+            display={{
+              xs: "block",
+              md: "flex",
+            }}
+            marginTop={{
+              xs: "15px",
+              md: 0,
+            }}
+            gap="32px"
+          >
             {userInfo.map((item, index) => (
               <Typography
                 key={index}
@@ -70,6 +122,15 @@ export default function Profile() {
                 color="#A2B8CD"
                 fontSize={16}
                 fontWeight="regular"
+                marginBottom={{
+                  xs: "15px",
+                  md: 0,
+                }}
+                sx={{
+                  "&:last-child": {
+                    marginBottom: 0,
+                  },
+                }}
               >
                 {item.icon}
                 {item.text}
