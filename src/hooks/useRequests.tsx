@@ -43,9 +43,19 @@ interface RequestContextData {
 export const RequestContext = createContext({} as RequestContextData);
 
 function RequestsProvider({ children }: useRequestsProps) {
+  const defaultUser: UserProps = {
+    login: "brnmilano",
+    avatar_url: "https://avatars.githubusercontent.com/u/66279500?v=4",
+    html_url: "https://avatars.githubusercontent.com",
+    name: "Bruno Milano",
+    company: "Sem empresa",
+    bio: "Desenvolvedor frontend",
+    followers: 40,
+  };
+
   const [loading, setLoading] = useState(false);
 
-  const [user, setUser] = useState<UserProps>({} as UserProps);
+  const [user, setUser] = useState<UserProps>(defaultUser);
   const [posts, setPosts] = useState<PostProps[]>([]);
   const [searchPost, setSearchPost] = useState<string>("");
   const [postDetails, setPostDetails] = useState<PostDetailsProps>(
@@ -186,6 +196,19 @@ function RequestsProvider({ children }: useRequestsProps) {
       });
   };
 
+  /**
+   * Comentário com finalidades de estudo.
+   * O hook useEffect nos auxilia a lidar com os side-effects (efeitos colaterais)
+   * e podemos usá-los também como ciclo de vida do componente.
+   *
+   * Utiliza o hook useEffect para executar a função `getUserProfile` apenas uma vez,
+   * quando o componente for montado.
+   *
+   * No primeiro parâmetro, passamos a função que será executada, no meu caso, a função `getUserProfile`.
+   * No segundo parâmetro, passamos um array vazio, indicando que a função será executada apenas uma vez.
+   * Caso o array não seja passado, a função será executada sempre que o componente for renderizado.
+   * Caso o array tenha alguma dependência, a função será executada sempre que a dependência for alterada.
+   */
   useEffect(() => {
     getUserProfile();
   }, []);

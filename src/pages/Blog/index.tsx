@@ -80,7 +80,7 @@ export default function Blog() {
                 color="#7B96B2"
                 fontWeight="regular"
               >
-                {posts.length} publicações
+                {posts?.length ?? 0} publicações
               </Typography>
             </Box>
 
@@ -131,20 +131,26 @@ export default function Blog() {
             </>
           ) : (
             <>
-              {posts.map((card, index) => {
-                return (
-                  <CardBasic
-                    key={index}
-                    number={card.number}
-                    title={card.title}
-                    content={card.body}
-                    date={card.created_at}
-                    handleClick={() => {
-                      handleViewPost(card.number);
-                    }}
-                  />
-                );
-              })}
+              {posts?.length > 0 ? (
+                posts.map((card, index) => {
+                  return (
+                    <CardBasic
+                      key={index}
+                      number={card.number}
+                      title={card.title}
+                      content={card.body}
+                      date={card.created_at}
+                      handleClick={() => {
+                        handleViewPost(card.number);
+                      }}
+                    />
+                  );
+                })
+              ) : (
+                <Typography variant="body1" color="textSecondary">
+                  Nenhuma publicação encontrada.
+                </Typography>
+              )}
             </>
           )}
         </Box>

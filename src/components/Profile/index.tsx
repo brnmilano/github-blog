@@ -15,9 +15,9 @@ export default function Profile() {
   const { user } = useRequests();
 
   const userInfo = [
-    { icon: <GitHubIcon />, text: user.login },
-    { icon: <CompanyIcon />, text: user.company ?? "Sem empresa" },
-    { icon: <FollowersIcon />, text: `${user.followers} seguidores` },
+    { icon: <GitHubIcon />, text: user?.login },
+    { icon: <CompanyIcon />, text: user?.company ?? "Sem empresa" },
+    { icon: <FollowersIcon />, text: `${user?.followers} seguidores` },
   ];
 
   return (
@@ -46,7 +46,7 @@ export default function Profile() {
         position="relative"
       >
         <Box display="flex" justifyContent="center">
-          <img src={user.avatar_url} />
+          <img src={user?.avatar_url} />
         </Box>
 
         <Box
@@ -74,7 +74,7 @@ export default function Profile() {
                   md: 0,
                 }}
               >
-                {user.login}
+                {user?.login}
               </Typography>
 
               <Box
@@ -84,7 +84,7 @@ export default function Profile() {
                 }}
               >
                 <a
-                  href={user.html_url}
+                  href={user?.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -100,7 +100,7 @@ export default function Profile() {
               fontSize={16}
               fontWeight="regular"
             >
-              {user.bio}
+              {user?.bio}
             </Typography>
           </Box>
 

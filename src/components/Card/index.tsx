@@ -1,6 +1,5 @@
 import { CardContent, Typography, Card, Box } from "@mui/material";
 import { capitalFirstLetter, getRelativeTime } from "../../utils";
-import RemoveMarkdown from "remove-markdown";
 
 interface CardProps {
   number: number;
@@ -24,7 +23,7 @@ interface CardProps {
 export default function CardBasic(props: CardProps) {
   const { title, content, date, number, handleClick } = props;
 
-  const formattedContent = RemoveMarkdown(content);
+  //const formattedContent = RemoveMarkdown(content);
 
   const formattedDate = getRelativeTime(date);
 
@@ -84,7 +83,7 @@ export default function CardBasic(props: CardProps) {
           overflow="hidden"
           textOverflow="ellipsis"
         >
-          {formattedContent}
+          {content}
         </Typography>
       </CardContent>
     </Card>
