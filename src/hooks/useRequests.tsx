@@ -206,7 +206,7 @@ function RequestsProvider({ children }: useRequestsProps) {
    *
    * No primeiro parâmetro, passamos a função que será executada, no meu caso, a função `getUserProfile`.
    * No segundo parâmetro, passamos um array vazio, indicando que a função será executada apenas uma vez.
-   * Caso o array não seja passado, a função será executada sempre que o componente for renderizado.
+   * Caso o array seja passado vazio, a função será executada sempre que o componente for renderizado.
    * Caso o array tenha alguma dependência, a função será executada sempre que a dependência for alterada.
    */
   useEffect(() => {
