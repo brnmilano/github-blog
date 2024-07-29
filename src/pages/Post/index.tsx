@@ -20,15 +20,15 @@ export default function Post() {
 
   const { postDetails, getPostDetails, loading } = useRequests();
 
-  const formattedDate = getRelativeTime(postDetails.created_at);
+  const formattedDate = getRelativeTime(postDetails?.created_at);
 
   const postDetailInfo = [
-    { icon: <GitHubIcon />, text: postDetails.login },
+    { icon: <GitHubIcon />, text: postDetails?.login },
     {
       icon: <CalendarIcon />,
       text: capitalFirstLetter(formattedDate),
     },
-    { icon: <CommentsIcon />, text: `${postDetails.comments} comentários` },
+    { icon: <CommentsIcon />, text: `${postDetails?.comments} comentários` },
   ];
 
   const onLoadScreen = () => {
@@ -97,7 +97,7 @@ export default function Post() {
                 </Link>
 
                 <a
-                  href={postDetails.html_url}
+                  href={postDetails?.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -112,7 +112,7 @@ export default function Post() {
                 fontSize={24}
                 fontWeight="bold"
               >
-                {postDetails.title}
+                {postDetails?.title}
               </Typography>
 
               <Box
@@ -172,7 +172,7 @@ export default function Post() {
           ) : (
             <>
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {postDetails.body}
+                {postDetails?.body}
               </ReactMarkdown>
             </>
           )}
