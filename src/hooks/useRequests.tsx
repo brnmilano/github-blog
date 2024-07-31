@@ -197,17 +197,20 @@ function RequestsProvider({ children }: useRequestsProps) {
   };
 
   /**
-   * Comentário com finalidades de estudo.
+   * - Comentário com finalidades de estudo sobre o useEffect e sua utilidade.
    * O hook useEffect nos auxilia a lidar com os side-effects (efeitos colaterais)
+   * (chamadas de API ou manipulação direta do DOM, por exemplo)
    * e podemos usá-los também como ciclo de vida do componente.
    *
-   * Utiliza o hook useEffect para executar a função `getUserProfile` apenas uma vez,
-   * quando o componente for montado.
+   * Nesse trecho de código, utilizamos o hook useEffect para executar a função
+   * `getUserProfile` apenas uma vez, quando o componente for montado.
    *
-   * No primeiro parâmetro, passamos a função que será executada, no meu caso, a função `getUserProfile`.
-   * No segundo parâmetro, passamos um array vazio, indicando que a função será executada apenas uma vez.
-   * Caso o array seja passado vazio, a função será executada sempre que o componente for renderizado.
-   * Caso o array tenha alguma dependência, a função será executada sempre que a dependência for alterada.
+   * - No caso utilizado abaixo:
+   * O primeiro parâmetro é a função a ser executada, no caso `getUserProfile`.
+   * O segundo parâmetro é um array de dependências. Um array vazio indica
+   * que a função deve ser executada apenas uma vez.
+   * Se o array contiver dependências, a função será re-executada sempre que
+   * alguma dependência dendo do segundo parâmetro mudar.
    */
   useEffect(() => {
     getUserProfile();
